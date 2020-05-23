@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using crass;
 
+[RequireComponent(typeof(Collider2D))]
 public class Platformer2D : MonoBehaviour
 {
     [Serializable]
@@ -29,8 +31,13 @@ public class Platformer2D : MonoBehaviour
     public string MoveAxis;
     public string JumpButton;
 
+    [Header("Sound")]
+    public float WallBumpRepeatTime;
+    public TransitionableFloat JumpQuickFader;
+
     [Header("References")]
     public Rigidbody2D Rigidbody;
+    public AudioSource JumpSource, LandSource, WallBumpSource, CeilingBumpSource;
 
     bool grounded => Physics2D.BoxCast(transform.position, GroundCheckBoxDimensions, 0, Vector2.down, HalfHeight, GroundLayers);
 
@@ -41,10 +48,27 @@ public class Platformer2D : MonoBehaviour
 
     float earlyJumpPressTimer;
 
+    float wallBumpRepeatTimer;
+
+    float initialJumpSourceVolume;
+
+    void Start ()
+    {
+        initialJumpSourceVolume = JumpSource.volume;
+
+        JumpQuickFader.AttachMonoBehaviour(this);
+        JumpQuickFader.Value = initialJumpSourceVolume;
+    }
+
     void Update ()
     {
         // call this in Update because tracking in FixedUpdate leads to dropped input
         trackInput();
+
+        // so that the response is instantaneous if the player walks into a wall, stops the button, and then presses the button again 
+        wallBumpRepeatTimer -= Time.deltaTime;
+
+        JumpSource.volume = JumpQuickFader.Value;
     }
 
     void FixedUpdate ()
@@ -60,6 +84,8 @@ public class Platformer2D : MonoBehaviour
             // start of jump
             newVelocity.y = JumpSpeedBurst;
             jumping = true;
+
+            playJumpSource();
         }
         else if (grounded && jumping && Rigidbody.velocity.y <= 0)
         {
@@ -70,6 +96,8 @@ public class Platformer2D : MonoBehaviour
         {
             // letting go of jump
             newVelocity.y = JumpSpeedCut;
+
+            fadeOutJumpSource();
         }
 
         // HORIZONTAL STATE
@@ -101,6 +129,42 @@ public class Platformer2D : MonoBehaviour
         Rigidbody.velocity = newVelocity;
     }
 
+    void OnCollisionEnter2D (Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts.DistinctBy(c => c.collider))
+        {
+            // assumes that all collisions are axis aligned
+            if (contact.normal == Vector2.up)
+            {
+                LandSource.Play();
+            }
+            else if (contact.normal == Vector2.down)
+            {
+                CeilingBumpSource.Play();
+                fadeOutJumpSource();
+            }
+            else
+            {
+                WallBumpSource.Play();
+                wallBumpRepeatTimer = WallBumpRepeatTime;
+            }
+        }
+    }
+
+    void OnCollisionStay2D (Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts.DistinctBy(c => c.collider))
+        {
+            if (contact.normal != moveInput * Vector2.left) continue;
+
+            if (wallBumpRepeatTimer < 0)
+            {
+                wallBumpRepeatTimer = WallBumpRepeatTime;
+                WallBumpSource.Play();
+            }
+        }
+    }
+
     void trackInput ()
     {
         moveInput = Input.GetAxis(MoveAxis);
@@ -109,6 +173,20 @@ public class Platformer2D : MonoBehaviour
 
         if (jumpInputPressed) earlyJumpPressTimer = EarlyJumpPressTime;
         else earlyJumpPressTimer -= Time.deltaTime;
+    }
+
+    void playJumpSource ()
+    {
+        JumpQuickFader.Value = initialJumpSourceVolume;
+        JumpSource.volume = initialJumpSourceVolume;
+        JumpSource.Play();
+    }
+
+    void fadeOutJumpSource ()
+    {
+        initialJumpSourceVolume = JumpSource.volume;
+        JumpQuickFader.Value = initialJumpSourceVolume;
+        JumpQuickFader.StartTransitionTo(0);
     }
 
     // explicitly classify 0 as different from positive/negative, since mathf.sign classifies 0 as positive
