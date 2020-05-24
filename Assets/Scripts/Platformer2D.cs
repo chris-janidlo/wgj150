@@ -35,8 +35,14 @@ public class Platformer2D : MonoBehaviour
     public float WallBumpRepeatTime;
     public TransitionableFloat JumpQuickFader;
 
+    [Header("Animation")]
+    public string MovementAnimationIntegerName;
+    public string JumpAnimationBoolName;
+
     [Header("References")]
     public Rigidbody2D Rigidbody;
+    public Animator Animator;
+    public SpriteRenderer SpriteRenderer;
     public AudioSource JumpSource, LandSource, WallBumpSource, CeilingBumpSource;
 
     bool grounded => Physics2D.BoxCast(transform.position, GroundCheckBoxDimensions, 0, Vector2.down, HalfHeight, GroundLayers);
@@ -64,6 +70,8 @@ public class Platformer2D : MonoBehaviour
     {
         // call this in Update because tracking in FixedUpdate leads to dropped input
         trackInput();
+
+        animate();
 
         // so that the response is instantaneous if the player walks into a wall, stops the button, and then presses the button again 
         wallBumpRepeatTimer -= Time.deltaTime;
@@ -173,6 +181,22 @@ public class Platformer2D : MonoBehaviour
 
         if (jumpInputPressed) earlyJumpPressTimer = EarlyJumpPressTime;
         else earlyJumpPressTimer -= Time.deltaTime;
+    }
+
+    void animate ()
+    {
+        Animator.SetInteger(MovementAnimationIntegerName, (int) ternarySign(moveInput));
+        Animator.SetBool(JumpAnimationBoolName, !grounded);
+
+        if (moveInput > 0 && SpriteRenderer.flipX)
+        {
+            SpriteRenderer.flipX = false;
+        }
+
+        if (moveInput < 0 && !SpriteRenderer.flipX)
+        {
+            SpriteRenderer.flipX = true;
+        }
     }
 
     void playJumpSource ()

@@ -581,6 +581,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1499551506108856024, guid: 45c05cda253544ad696712deee875039,
+        type: 3}
+      propertyPath: GroundProfile.MaxSpeed
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 1499551506108856027, guid: 45c05cda253544ad696712deee875039,
         type: 3}
       propertyPath: m_LocalPosition.x

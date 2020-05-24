@@ -486,8 +486,8 @@ MonoBehaviour:
   JumpSpeedBurst: 200
   JumpSpeedCut: 75
   EarlyJumpPressTime: 0.3
-  HalfHeight: 4
-  GroundCheckBoxDimensions: {x: 5, y: 2}
+  HalfHeight: 8
+  GroundCheckBoxDimensions: {x: 9, y: 2}
   GroundLayers:
     serializedVersion: 2
     m_Bits: 512
@@ -498,7 +498,11 @@ MonoBehaviour:
     value: 0
     Time: 0.1
     Ease: 10
+  MovementAnimationIntegerName: Movement
+  JumpAnimationBoolName: Jump
   Rigidbody: {fileID: 1499551506108856025}
+  Animator: {fileID: 473881144147586372}
+  SpriteRenderer: {fileID: 1499551506651035826}
   JumpSource: {fileID: 1499551506637596705}
   LandSource: {fileID: 1499551506098406816}
   WallBumpSource: {fileID: 1499551505259470871}
@@ -537,7 +541,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -548,7 +552,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 8, y: 8}
+  m_Size: {x: 14, y: 10}
   m_EdgeRadius: 0
 --- !u!1 &1499551506637596719
 GameObject:
@@ -688,6 +692,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1499551506651035827}
   - component: {fileID: 1499551506651035826}
+  - component: {fileID: 473881144147586372}
   m_Layer: 8
   m_Name: Visuals
   m_TagString: Untagged
@@ -704,7 +709,7 @@ Transform:
   m_GameObject: {fileID: 1499551506651035824}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 8, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1499551506108856027}
   m_RootOrder: 0
@@ -747,8 +752,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 16893bbd382854c109d23d3942adfcdb, type: 3}
-  m_Color: {r: 0.40392157, g: 0.44705883, b: 0.6627451, a: 1}
+  m_Sprite: {fileID: 4334783836991956000, guid: bd7dadbecdd1747c7a4e8388c9fe3607,
+    type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -758,3 +764,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &473881144147586372
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499551506651035824}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0305b91ae01e84edcace1a1e68feaf6b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
