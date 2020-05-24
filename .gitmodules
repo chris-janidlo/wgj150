@@ -1,3 +1,6 @@
 [submodule "Assets/Scripts/spellbook"]
 	path = Assets/Scripts/spellbook
 	url = https://github.com/crassSandwich/spellbook-unity
+[submodule "Assets/unity-aseprite-importer"]
+	path = Assets/unity-aseprite-importer
+	url = https://github.com/martinhodler/unity-aseprite-importer
