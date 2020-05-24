@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3858727708939862948}
   - component: {fileID: 3858727708939862949}
   m_Layer: 0
-  m_Name: Goal - Player
+  m_Name: Teleporter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 6007627129536956325, guid: 44ec4e80061034b6dbca8d2007be2205,
+  m_Sprite: {fileID: -8614841464861250793, guid: a942ff21de5714d5796dbb17a05ae309,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
